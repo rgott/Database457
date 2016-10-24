@@ -90,8 +90,4 @@ public class MainWindow
 		
 		
 	}
-	
-	
-	
-	
 }

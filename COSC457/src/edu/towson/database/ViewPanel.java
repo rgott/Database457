@@ -20,6 +20,7 @@ public class ViewPanel extends JPanel
 	 */
 	private static final long serialVersionUID = 7769765725001592207L;
 	private JTable table;
+	
 	/**
 	 * Create the panel.
 	 * 
@@ -31,7 +32,15 @@ public class ViewPanel extends JPanel
 		
 		
 		//TODO:FIX this causes an error in the caller design viewer 
-		table.setModel(MySQLConnection.getModel(statement)); // initial call to refresh
+		try
+		{
+//			table.setModel(MySQLConnection.getModel(statement)); // initial call to refresh
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
 	}
 	
 	

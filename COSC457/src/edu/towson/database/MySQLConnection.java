@@ -15,6 +15,11 @@ public class MySQLConnection
 		}
 		return instance;
 	}
+	private boolean _isConnected = false;
+	public boolean isConnected()
+	{
+		return _isConnected;
+	}
 	
 	private MySQLConnection()
 	{
@@ -51,14 +56,15 @@ public class MySQLConnection
 				// Tell the user they have the wrong password
 				e.printStackTrace();
 				//sqlConnect = null;
-				return false;
+				return _isConnected = false;
+				
 			} catch (ClassNotFoundException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		return true;
+		return _isConnected = true;
 	}
 	
 	public boolean disconnect() throws SQLException

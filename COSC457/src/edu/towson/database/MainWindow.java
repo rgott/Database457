@@ -71,7 +71,6 @@ public class MainWindow
 			{											   // using database
 				System.out.println("Cannot Connect");
 				// TODO: add error window poppup
-				return;
 			}
 		}
 		initialize();
@@ -101,11 +100,15 @@ public class MainWindow
 		mainContentPanel = new JPanel();
 		frame.getContentPane().add(mainContentPanel,BorderLayout.CENTER);
 		mainContentPanel.setLayout(new CardLayout(0, 0));
-		if(sqlConn != null)
+		
+		if(sqlConn.isConnected())
 		{
 			mainContentPanel.add(new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
 		}
-		
+		else
+		{
+			mainContentPanel.add(new ErrorPanel());
+		}
 		
 		Container bottomPanel = new Container();
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -146,7 +149,14 @@ public class MainWindow
 				swapPages_btn.setLabel("Back");
 				break;
 			case Viewer:
-				mainContentPanel.add(new ViewPanel(null));
+				if(sqlConn.isConnected())
+				{
+					mainContentPanel.add(new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
+				}
+				else
+				{
+					mainContentPanel.add(new ErrorPanel());
+				}
 				swapPages_btn.setLabel("Create New");
 				break;
 		}

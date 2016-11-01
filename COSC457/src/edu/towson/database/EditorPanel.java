@@ -1,5 +1,6 @@
 package edu.towson.database;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -7,6 +8,8 @@ import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
@@ -36,6 +39,16 @@ public abstract class EditorPanel extends JPanel
 		
 		setFormLayout(mainContentPanel,rows);
 
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		JComboBox<String> box = new JComboBox<>();
+		for (String item : Settings.getTablesToEdit())
+		{
+			box.addItem(item);
+		}
+		topPanel.add(box);
+
 		Button addUpd_btn = new Button("Update");
 		addUpd_btn.addActionListener(new ActionListener()
 		{
@@ -44,8 +57,10 @@ public abstract class EditorPanel extends JPanel
 				updateButtonAction();
 			}
 		});
-		this.add(addUpd_btn,BorderLayout.SOUTH);
+		topPanel.add(addUpd_btn);
 		
+		
+		this.add(topPanel,BorderLayout.NORTH);
 	}
 	
 	public abstract void updateButtonAction();
@@ -73,6 +88,11 @@ public abstract class EditorPanel extends JPanel
 		colSpec.add(ColumnSpec.decode("30px"));
 		
 		panel.setLayout(new FormLayout(colSpec.toArray(new ColumnSpec[colSpec.size()]),rowSpec.toArray(new RowSpec[rowSpec.size()])));
+	}
+	
+	public void s()
+	{
+		
 	}
 	
 	

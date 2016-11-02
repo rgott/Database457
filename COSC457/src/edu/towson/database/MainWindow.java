@@ -67,7 +67,7 @@ public class MainWindow
 
 		if (sqlConn != null)
 		{
-			if(!sqlConn.connect(URL, USER, PASS, USERDB)); // connect to towson db
+			if(!sqlConn.connect(URL, USER, PASS, USERDB)) // connect to towson db
 			{											   // using database
 				System.out.println("Cannot Connect");
 				// TODO: add error window poppup
@@ -146,7 +146,7 @@ public class MainWindow
 				swapPages_btn.setLabel("Back");
 				break;
 			case Viewer:
-				mainContentPanel.add(new ViewPanel(null));
+				mainContentPanel.add(new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
 				swapPages_btn.setLabel("Create New");
 				break;
 		}

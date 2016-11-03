@@ -9,6 +9,7 @@ import java.awt.Button;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
@@ -74,6 +75,14 @@ public abstract class EditorPanel extends JPanel
 		
 		panel.setLayout(new FormLayout(colSpec.toArray(new ColumnSpec[colSpec.size()]),rowSpec.toArray(new RowSpec[rowSpec.size()])));
 	}
+	
+//	public void s(ResultSet results)
+//	{
+//		for (int i = 0; i < results.getMetaData().getColumnCount(); i++)
+//		{
+//			
+//		}
+//	}
 	
 	
 	// public interfacing method

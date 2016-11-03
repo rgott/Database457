@@ -6,13 +6,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.sql.PreparedStatement;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.SpringLayout.Constraints;
 
 import edu.towson.database.editors.DepartmentEditor;
 
@@ -20,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 
-public class MainWindow
+public class MainWindow extends JFrame
 {
 	static final String URL = "jdbc:mysql://triton.towson.edu:3360";
 	static final String USER = "rgott2";
@@ -28,7 +26,6 @@ public class MainWindow
 	
 	static final String USERDB = USER + "db";
 
-	private JFrame frame;
 	private MySQLConnection sqlConn;
 
 	/**
@@ -48,7 +45,7 @@ public class MainWindow
 				try
 				{
 					MainWindow window = new MainWindow();
-					window.frame.setVisible(true);
+					window.setVisible(true);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -91,15 +88,14 @@ public class MainWindow
 	CurrentWindow window = CurrentWindow.Viewer;
 	private void initialize()
 	{
-		frame = new JFrame();
-		frame.setMinimumSize(new Dimension(300, 200));
-		frame.setBounds(100, 100, 695, 359);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setMinimumSize(new Dimension(300, 200));
+		setBounds(100, 100, 695, 359);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		frame.getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new BorderLayout());
 		
 		mainContentPanel = new JPanel();
-		frame.getContentPane().add(mainContentPanel,BorderLayout.CENTER);
+		getContentPane().add(mainContentPanel,BorderLayout.CENTER);
 		mainContentPanel.setLayout(new CardLayout(0, 0));
 		if(sqlConn != null)
 		{
@@ -121,7 +117,7 @@ public class MainWindow
 		});
 		bottomPanel.add(swapPages_btn);
 		
-		frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 	}
 	public void swapPanelWindow()
 	{

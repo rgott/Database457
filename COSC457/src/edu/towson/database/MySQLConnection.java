@@ -1,6 +1,7 @@
 package edu.towson.database;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 public class MySQLConnection
@@ -83,7 +84,26 @@ public class MySQLConnection
 		}
 		return null;
 	}
-	
+	public ResultSet ExecuteQuery(PreparedStatement statement)
+	{
+		try
+		{
+			return statement.executeQuery();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ResultSet ExecuteQuery(String statement)
+	{
+		return ExecuteQuery(getPreparedStatement(statement));
+	}
+	public DefaultTableModel getModel(String statement)
+	{
+		return getModel(ExecuteQuery(statement));
+	}
 	public static DefaultTableModel getModel(PreparedStatement ps)
 	{
 		try
@@ -96,15 +116,36 @@ public class MySQLConnection
 		}
 		return null;
 	}
+	
+	public ArrayList<String> getTables()
+	{
+		ArrayList<String> list = new ArrayList<>();
+		try
+		{
+			
+			ResultSet tables = ExecuteQuery("show tables;");
+			tables.first();
+			do
+			{
+				list.add(tables.getString(1));
+			}while(tables.next());
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	public static DefaultTableModel getModel(ResultSet rs)
 	{
 		try
 		{
-			int columns = rs.getMetaData().getColumnCount() - 1; // get num of columns (1 -> x) - 1 == 0 -> x
+			int columns = rs.getMetaData().getColumnCount(); // get num of columns (1 -> x) - 1 == 0 -> x
 
 			// get header info
 			String[] columnNames = new String[columns];
-			for (int i = 1; i < rs.getMetaData().getColumnCount(); i++)
+			for (int i = 1; i <= columns; i++)
 			{
 				// System.out.println(rs.getMetaData().getColumnName(i));// print the columns
 				columnNames[i - 1] = rs.getMetaData().getColumnName(i);
@@ -117,7 +158,7 @@ public class MySQLConnection
 			while (rs.next())
 			{
 				String[] row = new String[columns];
-				for (int i = 1; i < columnNames.length; i++)
+				for (int i = 1; i <= columns; i++)
 				{
 					row[i - 1] = rs.getString(i);
 				}
@@ -144,6 +185,27 @@ public class MySQLConnection
 			System.err.println("SOMETHING WENT TERRIBLY WRONG");
 			e.printStackTrace();
 		}
+	}
+
+	public ArrayList<String> getColumns(String selectQuery)
+	{
+		ArrayList<String> list = new ArrayList<>();
+		try
+		{
+			
+			ResultSet query = ExecuteQuery(selectQuery);
+		
+			for (int i = 1; i <= query.getMetaData().getColumnCount(); i++)
+			{
+				list.add(query.getMetaData().getColumnName(i));
+			}
+			
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return list;
 	}
 	
 	

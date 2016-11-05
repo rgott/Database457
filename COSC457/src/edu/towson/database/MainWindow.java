@@ -88,9 +88,8 @@ public class MainWindow extends JFrame
 		getContentPane().add(mainContentPanel,BorderLayout.CENTER);
 		mainContentPanel.setLayout(new CardLayout(0, 0));
 
-		
 		windowSwapper = Swappable.getInstance(mainContentPanel);
-		windowSwapper.add("view", new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
+		windowSwapper.add("view", new ViewPanel("SELECT * FROM DEPARTMENT"));
 		windowSwapper.add("Edit", new DepartmentEditor());
 		
 		windowSwapper.changeTo("view");

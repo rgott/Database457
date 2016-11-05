@@ -9,7 +9,6 @@ import java.awt.Button;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
-import java.sql.PreparedStatement;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -25,24 +24,14 @@ public class ViewPanel extends JPanel
 	 * 
 	 *
 	 */
-	public ViewPanel(PreparedStatement statement)
+	public ViewPanel(String statement)
 	{
 		initialize(statement);
 		
-		
-		//TODO:FIX this causes an error in the caller design viewer 
-		try
-		{
-			table.setModel(MySQLConnection.getModel(statement)); // initial call to refresh
-		}
-		catch(Exception e)
-		{
-			
-		}
+		table.setModel(MySQLConnection.getInstance().getModel(statement)); // initial call to refresh
 	}
 	
-	
-	public void initialize(PreparedStatement statement)
+	public void initialize(String statement)
 	{
 		setLayout(new BorderLayout());
 		
@@ -52,20 +41,50 @@ public class ViewPanel extends JPanel
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
-		Container bottomPanel = new Container();
-		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		Container topPanel = new Container();
+		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
 		Button refresh_btn = new Button("Refresh");
 		refresh_btn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				table.setModel(MySQLConnection.getModel(statement));
+				table.setModel(MySQLConnection.getInstance().getModel(statement));
 			}
 		});
-		bottomPanel.add(refresh_btn);
-			
-		add(bottomPanel,BorderLayout.NORTH);
+		
+		
+		topPanel.add(refresh_btn);
+		
+		
+		Button tableSetup_btn = new Button("Table Setup");
+		Swappable swap = Swappable.getInstance();
+		swap.add("tableSelect", new TableSelect());
+		tableSetup_btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				swap.changeTo("tableSelect");
+			}
+		});
+		topPanel.add(tableSetup_btn);
+		
+		
+		add(topPanel,BorderLayout.NORTH);
+
+		Container bottomPanel = new Container();
+		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+		Button createNew_btn = new Button("Create New");
+		createNew_btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				Swappable.getInstance().revert();
+			}
+		});
+		bottomPanel.add(createNew_btn);
+		add(bottomPanel,BorderLayout.SOUTH);
 	}
 	
 }

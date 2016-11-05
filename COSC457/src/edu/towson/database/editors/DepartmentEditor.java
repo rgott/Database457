@@ -11,10 +11,12 @@ public class DepartmentEditor extends EditorPanel
 	 */
 	public DepartmentEditor()
 	{
-		super(3);
+		super(4);
 		Name = createField("Name");
 		Date = createField("Date");
 		DepartmentNo = createField("Dept");
+		DepartmentNo = createField("Dept");
+		
 	}
 	@Override
 	public void updateButtonAction()

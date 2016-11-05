@@ -2,10 +2,8 @@ package edu.towson.database;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,8 +12,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import edu.towson.database.editors.DepartmentEditor;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 
 public class MainWindow extends JFrame
@@ -77,15 +73,9 @@ public class MainWindow extends JFrame
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	
-	private enum CurrentWindow
-	{
-		Editor,
-		Viewer
-	}
 	Button swapPages_btn;
 	JPanel mainContentPanel;
-	CurrentWindow window = CurrentWindow.Viewer;
+	Swappable windowSwapper;
 	private void initialize()
 	{
 		setMinimumSize(new Dimension(300, 200));
@@ -97,55 +87,13 @@ public class MainWindow extends JFrame
 		mainContentPanel = new JPanel();
 		getContentPane().add(mainContentPanel,BorderLayout.CENTER);
 		mainContentPanel.setLayout(new CardLayout(0, 0));
-		if(sqlConn != null)
-		{
-			mainContentPanel.add(new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
-		}
+
 		
+		windowSwapper = Swappable.getInstance(mainContentPanel);
+		windowSwapper.add("view", new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
+		windowSwapper.add("Edit", new DepartmentEditor());
 		
-		Container bottomPanel = new Container();
-		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		windowSwapper.changeTo("view");
 		
-		swapPages_btn = new Button("Create New");
-		swapPages_btn.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent arg0)
-			{
-				swapPanelWindow();
-				setMainPanelContentBasedOnCurrentWindow();
-			}
-		});
-		bottomPanel.add(swapPages_btn);
-		
-		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-	}
-	public void swapPanelWindow()
-	{
-		// swap
-		if(window == CurrentWindow.Viewer)
-		{
-			window = CurrentWindow.Editor;
-		}
-		else if(window == CurrentWindow.Editor)
-		{
-			window = CurrentWindow.Viewer;
-		}
-	}
-	public void setMainPanelContentBasedOnCurrentWindow()
-	{
-		mainContentPanel.removeAll();
-		// TODO: fix Layout not updating
-		switch (window)
-		{
-			case Editor:
-				mainContentPanel.add(new DepartmentEditor());
-				swapPages_btn.setLabel("Back");
-				break;
-			case Viewer:
-				mainContentPanel.add(new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
-				swapPages_btn.setLabel("Create New");
-				break;
-		}
-		mainContentPanel.revalidate(); // allow form to refresh
 	}
 }

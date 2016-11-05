@@ -34,7 +34,6 @@ public class ViewPanel extends JPanel
 		try
 		{
 			table.setModel(MySQLConnection.getModel(statement)); // initial call to refresh
-			
 		}
 		catch(Exception e)
 		{

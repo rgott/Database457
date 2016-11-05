@@ -1,6 +1,10 @@
 package edu.towson.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
@@ -96,6 +100,46 @@ public class MySQLConnection
 		}
 		return null;
 	}
+	
+	public int UpdateQuery(String statement)
+	{
+		return UpdateQuery(getPreparedStatement(statement));
+	}
+	
+	public static ResultSet getRow(ResultSet rs, int rowNum)
+	{
+		int count = 0;
+		try
+		{
+			rs.first();
+			do
+			{
+				count++;
+			}
+			while(count != rowNum && rs.next());
+			return rs;
+		} catch (SQLException e)
+		{
+			MessageBox.show(e.getMessage(),"EXCEPTION");
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public int UpdateQuery(PreparedStatement statement)
+	{
+		try
+		{
+			return statement.executeUpdate();
+		} catch (SQLException e)
+		{
+			MessageBox.show(e.getMessage(),"EXCEPTION");
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	
 	public ResultSet ExecuteQuery(String statement)
 	{
 		return ExecuteQuery(getPreparedStatement(statement));
@@ -174,6 +218,7 @@ public class MySQLConnection
 
 		return null;
 	}
+	
 	
 	public void finalize()
 	{

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
 public class ColumnSelect extends JPanel
@@ -21,27 +24,30 @@ public class ColumnSelect extends JPanel
 	 */
 	public ColumnSelect(String tableName)
 	{
-		setLayout(null);
+		setLayout(new BorderLayout());
+		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(null);
 		
 		JLabel lblSelectedColumns = new JLabel("Selected Columns");
-		lblSelectedColumns.setBounds(36, 26, 148, 14);
-		add(lblSelectedColumns);
+		lblSelectedColumns.setBounds(49, 25, 84, 14);
+		mainPanel.add(lblSelectedColumns);
 		
 		JLabel lblUnselectedColumns = new JLabel("Unselected columns");
-		lblUnselectedColumns.setBounds(272, 26, 130, 14);
-		add(lblUnselectedColumns);
-		
-		
+		lblUnselectedColumns.setBounds(305, 25, 94, 14);
+		mainPanel.add(lblUnselectedColumns);
 		
 		JList<String> selected = new JList<String>();
 		selected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		selected.setBounds(10, 51, 163, 224);
-		add(selected);
+		selected.setBounds(10, 50, 166, 206);
+		mainPanel.add(selected);
 		
 		JList<String> unselected = new JList<String>();
 		unselected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		unselected.setBounds(256, 51, 172, 224);
-		add(unselected);
+		unselected.setBounds(259, 50, 181, 206);
+		mainPanel.add(unselected);
+		
+		add(mainPanel,BorderLayout.CENTER);
 		
 		
 		ArrayList<String> tables = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
@@ -71,8 +77,8 @@ public class ColumnSelect extends JPanel
 				}
 			}
 		});
-		remove_btn.setBounds(183, 90, 63, 38);
-		add(remove_btn);
+		remove_btn.setBounds(186, 114, 63, 38);
+		mainPanel.add(remove_btn);
 		
 		JButton add_btn = new JButton("<<");
 		add_btn.addActionListener(new ActionListener()
@@ -90,37 +96,56 @@ public class ColumnSelect extends JPanel
 				}
 			}
 		});
-		add_btn.setBounds(183, 160, 63, 38);
-		add(add_btn);
+		add_btn.setBounds(186, 155, 63, 38);
+		mainPanel.add(add_btn);
 
+		
+		
+		
+		
+		// main bottom layout
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new BorderLayout());
+
+		
+		// bottom left layout
+		Container leftBPanel = new Container();
+		leftBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
 		JButton back_btn = new JButton("Back");
-		back_btn.addActionListener(new ActionListener()
+		back_btn.addActionListener(new ActionListener() 
 		{
-			public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent arg0)
 			{
-				Swappable.getInstance().changeTo(new TableSelect());
+				Swappable.getInstance().changeTo("view");
 			}
 		});
-		back_btn.setBounds(10, 301, 63, 23);
-		add(back_btn);
+		leftBPanel.add(back_btn);
+		bottomPanel.add(leftBPanel, BorderLayout.WEST);
+		
+		// bottom right layout
+		JPanel rightBPanel = new JPanel();
+		rightBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
 
 		JButton finish_btn = new JButton("Finish");
 		finish_btn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-//				System.out.println(createSelectFromList(tableName));
-				Swappable.getInstance().changeTo(new ViewPanel(createSelectFromList(tableName)));
+				Swappable.getInstance().changeTo(new ViewPanel(createColumnsForSelect(tableName), tableName));
 			}
 		});
-		finish_btn.setBounds(352, 301, 63, 23);
-		add(finish_btn);
+		rightBPanel.add(finish_btn);
+		bottomPanel.add(rightBPanel,BorderLayout.EAST);
+		
+		add(bottomPanel,BorderLayout.SOUTH);
 	}
 	
 	
-	public String createSelectFromList(String table)
+	public String createColumnsForSelect(String table)
 	{
-		StringBuilder statement = new StringBuilder("SELECT ");
+		StringBuilder statement = new StringBuilder();
 		
 		for (int i = 0; i < selectedModel.size() - 1; i++)
 		{
@@ -128,9 +153,6 @@ public class ColumnSelect extends JPanel
 			statement.append(", ");
 		}
 		statement.append(selectedModel.getElementAt(selectedModel.size() - 1));
-		
-		statement.append(" FROM ");
-		statement.append(table);
 		
 		return statement.toString();
 	}

@@ -2,27 +2,30 @@ package edu.towson.database;
 
 import java.util.Hashtable;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Swappable
 {
 	JPanel swapContainer;
+	JFrame frame;
 	protected Hashtable<String, JPanel> Items;
 	private static Swappable instance;
 	
 	private String PreviousSwap = null;
 	private String CurrentSwap = null;
-	public static Swappable getInstance(JPanel mainContentPanel)
+	public static Swappable getInstance(JFrame frame,JPanel mainContentPanel)
 	{
 		if(instance == null)
-			instance = new Swappable(mainContentPanel);
+			instance = new Swappable(frame, mainContentPanel);
 		return instance;
 	}
 	
-	private Swappable(JPanel swapContainer)
+	private Swappable(JFrame frame, JPanel swapContainer)
 	{
 		Items = new Hashtable<>();
 		this.swapContainer = swapContainer;
+		this.frame = frame;
 	}
 	public static Swappable getInstance()
 	{
@@ -57,6 +60,7 @@ public class Swappable
 			swapContainer.removeAll();
 			swapContainer.add(choice);
 			swapContainer.revalidate();
+			frame.repaint();
 			return true;
 		}
 		return false;

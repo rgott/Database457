@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import java.util.ArrayList;
-
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.DefaultListModel;
@@ -12,18 +11,22 @@ import javax.swing.JButton;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
 public class TableSelect extends JPanel
 {
-	JButton btnSelectColumns;
+	JButton selectColumns_btn;
+	JButton back_btn;
 	
 	/**
 	 * Create the panel.
 	 */
 	public TableSelect()
 	{
-		setLayout(null);
+		setLayout(new BorderLayout());
 		
 		JList<String> list = new JList<String>();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -31,30 +34,53 @@ public class TableSelect extends JPanel
 		{
 			public void valueChanged(ListSelectionEvent arg0) 
 			{
-				btnSelectColumns.setEnabled(true);
+				selectColumns_btn.setEnabled(true);
 			}
 		});
-		list.setBounds(10, 36, 512, 133);
-		add(list);
+		add(list,BorderLayout.CENTER);
 		
 		JLabel lblSelectTable = new JLabel("Select Table");
-		lblSelectTable.setBounds(10, 11, 92, 14);
-		add(lblSelectTable);
+		add(lblSelectTable,BorderLayout.NORTH);
 		
 		
-		Swappable swap = Swappable.getInstance();
+		// main bottom layout
+		Container bottomPanel = new Container();
+		bottomPanel.setLayout(new BorderLayout());
+
 		
-		btnSelectColumns = new JButton("Select Columns");
-		btnSelectColumns.addActionListener(new ActionListener() 
+		// bottom left layout
+		Container leftBPanel = new Container();
+		leftBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		back_btn = new JButton("Back");
+		back_btn.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				swap.changeTo(new ColumnSelect(list.getSelectedValue()));
+				Swappable.getInstance().changeTo("view");
 			}
 		});
-		btnSelectColumns.setBounds(397, 192, 125, 23);
-		btnSelectColumns.setEnabled(false);
-		add(btnSelectColumns);
+		leftBPanel.add(back_btn);
+		bottomPanel.add(leftBPanel, BorderLayout.WEST);
+		
+		// bottom right layout
+		JPanel rightBPanel = new JPanel();
+		rightBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+		selectColumns_btn = new JButton("Select Columns");
+		selectColumns_btn.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				Swappable.getInstance().changeTo(new ColumnSelect(list.getSelectedValue()));
+			}
+		});
+		selectColumns_btn.setEnabled(false);
+		rightBPanel.add(selectColumns_btn);
+		bottomPanel.add(rightBPanel,BorderLayout.EAST);
+		
+		add(bottomPanel,BorderLayout.SOUTH);
+		
 		
 		ArrayList<String> tables = MySQLConnection.getInstance().getTables();
 		DefaultListModel<String> listval = new DefaultListModel<String>();

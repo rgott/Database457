@@ -1,13 +1,11 @@
 package edu.towson.database;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -21,30 +19,38 @@ public class ViewPanel extends JPanel
 	
 	/**
 	 * Create the panel.
-	 * 
-	 *
 	 */
-	public ViewPanel(String statement)
+	String statement;
+	String tableName;
+	public ViewPanel(String select, String tableName)
 	{
+		StringBuilder selectStatement = new StringBuilder("SELECT ");
+		selectStatement.append(select);
+		selectStatement.append(" FROM ");
+		selectStatement.append(tableName);
+		
+		this.tableName = tableName;
+		this.statement = selectStatement.toString(); 
+
 		initialize(statement);
 		
 		table.setModel(MySQLConnection.getInstance().getModel(statement)); // initial call to refresh
 	}
-	
+
 	public void initialize(String statement)
 	{
 		setLayout(new BorderLayout());
 		
-		JScrollPane scrollPane = new JScrollPane((Component) null);
+		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane,BorderLayout.CENTER);
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
-		Container topPanel = new Container();
+		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-		Button refresh_btn = new Button("Refresh");
+		JButton refresh_btn = new JButton("Refresh");
 		refresh_btn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -52,12 +58,10 @@ public class ViewPanel extends JPanel
 				table.setModel(MySQLConnection.getInstance().getModel(statement));
 			}
 		});
-		
-		
 		topPanel.add(refresh_btn);
 		
 		
-		Button tableSetup_btn = new Button("Table Setup");
+		JButton tableSetup_btn = new JButton("Table Setup");
 		Swappable swap = Swappable.getInstance();
 		swap.add("tableSelect", new TableSelect());
 		tableSetup_btn.addActionListener(new ActionListener()
@@ -69,18 +73,17 @@ public class ViewPanel extends JPanel
 		});
 		topPanel.add(tableSetup_btn);
 		
-		
 		add(topPanel,BorderLayout.NORTH);
 
-		Container bottomPanel = new Container();
+		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-		Button createNew_btn = new Button("Create New");
+		JButton createNew_btn = new JButton("Create New");
 		createNew_btn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				Swappable.getInstance().revert();
+				Swappable.getInstance().changeTo(new EditorPanel(tableName));
 			}
 		});
 		bottomPanel.add(createNew_btn);

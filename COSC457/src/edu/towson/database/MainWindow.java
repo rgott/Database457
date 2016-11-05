@@ -9,8 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-import edu.towson.database.editors.DepartmentEditor;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.CardLayout;
 
@@ -23,6 +22,11 @@ public class MainWindow extends JFrame
 	static final String USERDB = USER + "db";
 
 	private MySQLConnection sqlConn;
+	
+	
+	Button swapPages_btn;
+	JPanel mainContentPanel;
+	Swappable windowSwapper;
 
 	/**
 	 * Launch the application.
@@ -68,14 +72,18 @@ public class MainWindow extends JFrame
 			}
 		}
 		initialize();
+		
+		windowSwapper = Swappable.getInstance(this, mainContentPanel);
+		windowSwapper.add("view", new ViewPanel("*","DEPARTMENT"));
+		windowSwapper.add("Edit", new EditorPanel("DEPARTMENT"));
+		
+		windowSwapper.changeTo("view");
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	Button swapPages_btn;
-	JPanel mainContentPanel;
-	Swappable windowSwapper;
+	
 	private void initialize()
 	{
 		setMinimumSize(new Dimension(300, 200));
@@ -86,13 +94,7 @@ public class MainWindow extends JFrame
 		
 		mainContentPanel = new JPanel();
 		getContentPane().add(mainContentPanel,BorderLayout.CENTER);
+		mainContentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		mainContentPanel.setLayout(new CardLayout(0, 0));
-
-		windowSwapper = Swappable.getInstance(mainContentPanel);
-		windowSwapper.add("view", new ViewPanel("SELECT * FROM DEPARTMENT"));
-		windowSwapper.add("Edit", new DepartmentEditor());
-		
-		windowSwapper.changeTo("view");
-		
 	}
 }

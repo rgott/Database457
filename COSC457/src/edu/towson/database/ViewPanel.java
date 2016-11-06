@@ -81,7 +81,6 @@ public class ViewPanel extends JPanel
 		        }
 			}
 		});
-		table.setCellSelectionEnabled(false);
 		scrollPane.setViewportView(table);
 		
 		JPanel topPanel = new JPanel();

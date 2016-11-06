@@ -233,16 +233,18 @@ public class MySQLConnection
 		}
 	}
 
-	public Hashtable<String, Integer> getColumns(String selectQuery)
+	public ArrayList<ColumnData> getColumns(String selectQuery)
 	{
-		Hashtable<String, Integer> list = new Hashtable<>();
+		ArrayList<ColumnData> list = new ArrayList<>();
 		try
 		{
 			ResultSet query = ExecuteQuery(selectQuery);
-		
 			for (int i = 1; i <= query.getMetaData().getColumnCount(); i++)
 			{
-				list.put(query.getMetaData().getColumnName(i),query.getMetaData().getColumnType(i));
+				list.add(new ColumnData(
+						query.getMetaData().getColumnName(i),
+						query.getMetaData().getColumnType(i),
+						query.getMetaData().getPrecision(i)));
 			}
 		} catch (SQLException e)
 		{

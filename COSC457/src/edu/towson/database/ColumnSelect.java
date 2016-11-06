@@ -52,11 +52,11 @@ public class ColumnSelect extends JPanel
 		add(mainPanel,BorderLayout.CENTER);
 		
 		
-		Hashtable<String,Integer> tables = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
+		ArrayList<ColumnData> tables = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
 		selectedModel = new DefaultListModel<String>();
-		for (Entry<String, Integer> item : tables.entrySet())
+		for (ColumnData item : tables)
 		{
-			selectedModel.addElement(item.getKey());
+			selectedModel.addElement(item.Name);
 		}
 		selected.setModel(selectedModel);
 		

@@ -42,16 +42,16 @@ public class EditorPanel extends JPanel
 		this(tableName, null);
 	}
 	
-	public boolean isValidInput()
-	{
-		for (Entry<String, JTextField> item : fields.entrySet())
-		{
-			if(!item.getValue().getInputVerifier().verify(item.getValue()));
-				return false;
-			//QueryInputVerifier.getType((QueryInputVerifier)item.getValue().getInputVerifier());
-		}
-		return true;
-	}
+//	public boolean isValidInput()
+//	{
+//		for (Entry<String, JTextField> item : fields.entrySet())
+//		{
+//			if(!item.getValue().getInputVerifier().verify(item.getValue()));
+//				return false;
+//			//QueryInputVerifier.getType((QueryInputVerifier)item.getValue().getInputVerifier());
+//		}
+//		return true;
+//	}
 	
 	public ActionListener AddQueryAL(String tableName)
 	{
@@ -59,11 +59,11 @@ public class EditorPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if(!isValidInput()) 
-				{
-					MessageBox.show("Please Check your input", "INPUT ERROR");
-					return;
-				}
+//				if(!isValidInput()) 
+//				{
+//					MessageBox.show("Please Check your input", "INPUT ERROR");
+//					return;
+//				}
 				
 				// build insert query
 				StringBuilder insertQuery = new StringBuilder("INSERT INTO ");
@@ -103,6 +103,8 @@ public class EditorPanel extends JPanel
 				
 //				System.out.println(insertQuery.toString());
 				MySQLConnection.getInstance().UpdateQuery(insertQuery.toString());
+				
+				Swappable.getInstance().changeTo("view");
 			}
 		};
 	}
@@ -113,11 +115,11 @@ public class EditorPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if(!isValidInput()) 
-				{
-					MessageBox.show("Please Check your input", "INPUT ERROR");
-					return;
-				}
+//				if(!isValidInput()) 
+//				{
+//					MessageBox.show("Please Check your input", "INPUT ERROR");
+//					return;
+//				}
 				
 				// build insert query
 				StringBuilder updateQuery = new StringBuilder("UPDATE ");
@@ -172,6 +174,8 @@ public class EditorPanel extends JPanel
 				
 //				System.out.println(updateQuery.toString());
 				MySQLConnection.getInstance().UpdateQuery(updateQuery.toString());
+				
+				Swappable.getInstance().changeTo("view");
 			}
 		};
 	}
@@ -185,14 +189,14 @@ public class EditorPanel extends JPanel
 		JScrollPane scollable = new JScrollPane(mainContentPanel);
 		this.add(scollable);
 		
-		Hashtable<String,Integer> columns = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
+		ArrayList<ColumnData> columns = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
 		setFormLayout(mainContentPanel, columns.size());
 
 		fields = new Hashtable<>();
 		
-		for (Entry<String, Integer> item : columns.entrySet())
+		for (ColumnData item : columns)
 		{
-			fields.put(item.getKey(), createField(item.getKey(),item.getValue()));
+			fields.put(item.Name, createField(item));
 		}
 		
 		// main bottom layout
@@ -280,19 +284,19 @@ public class EditorPanel extends JPanel
 	}
 	
 	// public interfacing method
-	public JTextField createField(String description, Integer queryType)
+	public JTextField createField(ColumnData data)
 	{
-		return createField(mainContentPanel, description,queryType);
+		return createField(mainContentPanel, data);
 	}
 	
-	private JTextField createField(JPanel comp, String description, Integer queryType)
+	private JTextField createField(JPanel comp, ColumnData data)
 	{	
 		int realRow = ((currentRow * 2) + 2);
-		JLabel label = new JLabel(description);
+		JLabel label = new JLabel(data.Name);
 		comp.add(label, "2, " + realRow + ", left, center");
 		
 		JTextField textField = new JTextField();
-		textField.setInputVerifier(new QueryInputVerifier(queryType));
+		textField.setInputVerifier(new QueryInputVerifier(new JLabel(),data)); //TODO: make real error label
 		comp.add(textField, "4, " + realRow + ", fill, default");
 
 		currentRow++;

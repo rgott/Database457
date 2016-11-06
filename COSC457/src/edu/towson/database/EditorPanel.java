@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -36,6 +37,7 @@ public class EditorPanel extends JPanel
 	Hashtable<String, JTextField> fields;
 	ActionListener addUpd_btn_lstnr;
 	JPanel mainContentPanel;
+	JLabel errorMessageLabel;
 	// Default editor panel
 	public EditorPanel(String tableName)
 	{
@@ -189,6 +191,10 @@ public class EditorPanel extends JPanel
 		JScrollPane scollable = new JScrollPane(mainContentPanel);
 		this.add(scollable);
 		
+		errorMessageLabel = new JLabel("");
+		errorMessageLabel.setForeground(Color.RED);
+		
+		
 		ArrayList<ColumnData> columns = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
 		setFormLayout(mainContentPanel, columns.size());
 
@@ -200,12 +206,12 @@ public class EditorPanel extends JPanel
 		}
 		
 		// main bottom layout
-		Container bottomPanel = new Container();
+		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BorderLayout());
 
 		
 		// bottom left layout
-		Container leftBPanel = new Container();
+		JPanel leftBPanel = new JPanel();
 		leftBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		Button back_btn = new Button("Back");
@@ -220,8 +226,9 @@ public class EditorPanel extends JPanel
 		bottomPanel.add(leftBPanel, BorderLayout.WEST);
 		
 		
+		bottomPanel.add(errorMessageLabel,BorderLayout.CENTER);
 		// bottom right layout
-		Container rightBPanel = new Container();
+		JPanel rightBPanel = new JPanel();
 		rightBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
 		if(rs == null)
@@ -236,6 +243,8 @@ public class EditorPanel extends JPanel
 		}
 		addUpd_btn.addActionListener(addUpd_btn_lstnr);
 
+		
+		
 		rightBPanel.add(addUpd_btn);
 		bottomPanel.add(rightBPanel,BorderLayout.EAST);
 		add(bottomPanel,BorderLayout.SOUTH);
@@ -296,7 +305,7 @@ public class EditorPanel extends JPanel
 		comp.add(label, "2, " + realRow + ", left, center");
 		
 		JTextField textField = new JTextField();
-		textField.setInputVerifier(new QueryInputVerifier(new JLabel(),data)); //TODO: make real error label
+		textField.setInputVerifier(new QueryInputVerifier(errorMessageLabel,data)); //TODO: make real error label
 		comp.add(textField, "4, " + realRow + ", fill, default");
 
 		currentRow++;

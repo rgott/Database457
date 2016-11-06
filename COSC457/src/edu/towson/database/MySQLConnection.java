@@ -243,8 +243,8 @@ public class MySQLConnection
 			{
 				list.add(new ColumnData(
 						query.getMetaData().getColumnName(i),
-						query.getMetaData().getColumnType(i),
-						query.getMetaData().getPrecision(i)));
+						query.getMetaData().getPrecision(i),
+						query.getMetaData().getColumnType(i)));
 			}
 		} catch (SQLException e)
 		{

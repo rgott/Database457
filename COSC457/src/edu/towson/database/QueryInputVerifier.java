@@ -44,7 +44,6 @@ public class QueryInputVerifier extends InputVerifier
 				type = QueryType.String;
 				break;
 		}
-		
 	}
 	
     @Override
@@ -55,22 +54,20 @@ public class QueryInputVerifier extends InputVerifier
         
         if(cdata.Precision < text.length())
         {
-        	// must be of length cdata.Precision
+        	errorMessage.setText("must be of length " + cdata.Precision + ". You have " + text.length() + " characters currently");
         	return false;
         }
         
         switch (type)
 		{
-			case Character:
-				return text.length() == 1;
 			case Number:
 				try
 		        {
 		    		new BigDecimal(text);
-		    		return true;
+		    		break;
 		        } catch (NumberFormatException e) 
 		        {
-		        	// number not valid
+		        	errorMessage.setText("Not a valid number");
 		            return false;
 		        }
 			case Date:
@@ -78,13 +75,14 @@ public class QueryInputVerifier extends InputVerifier
 			    try 
 			    {
 			        df.parse(text);
-			        return true;
+			        break;
 			    } catch (ParseException e) 
 			    {
-			    	// not valid format (MM-dd-yy)
+			    	errorMessage.setText("not valid format (MM-dd-yy)");
 			        return false;
 			    }
 		}
+        errorMessage.setText("");
 		return true;
     }
 }

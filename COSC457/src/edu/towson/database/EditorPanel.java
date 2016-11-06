@@ -28,7 +28,6 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class EditorPanel extends JPanel
 {
-
 	/**
 	 * Created To prevent warning
 	 */
@@ -43,12 +42,29 @@ public class EditorPanel extends JPanel
 		this(tableName, null);
 	}
 	
+	public boolean isValidInput()
+	{
+		for (Entry<String, JTextField> item : fields.entrySet())
+		{
+			if(!item.getValue().getInputVerifier().verify(item.getValue()));
+				return false;
+			//QueryInputVerifier.getType((QueryInputVerifier)item.getValue().getInputVerifier());
+		}
+		return true;
+	}
+	
 	public ActionListener AddQueryAL(String tableName)
 	{
 		return new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				if(!isValidInput()) 
+				{
+					MessageBox.show("Please Check your input", "INPUT ERROR");
+					return;
+				}
+				
 				// build insert query
 				StringBuilder insertQuery = new StringBuilder("INSERT INTO ");
 				insertQuery.append(tableName);
@@ -97,6 +113,12 @@ public class EditorPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
+				if(!isValidInput()) 
+				{
+					MessageBox.show("Please Check your input", "INPUT ERROR");
+					return;
+				}
+				
 				// build insert query
 				StringBuilder updateQuery = new StringBuilder("UPDATE ");
 				updateQuery.append(tableName);
@@ -126,7 +148,6 @@ public class EditorPanel extends JPanel
 
 				try
 				{
-				
 					// WHERE clause to find the statement
 					updateQuery.append(" WHERE ");
 					for (int j = 1; j < rsCurrentOnly.getMetaData().getColumnCount(); j++)
@@ -164,14 +185,14 @@ public class EditorPanel extends JPanel
 		JScrollPane scollable = new JScrollPane(mainContentPanel);
 		this.add(scollable);
 		
-		ArrayList<String> columns = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
+		Hashtable<String,Integer> columns = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
 		setFormLayout(mainContentPanel, columns.size());
 
 		fields = new Hashtable<>();
 		
-		for (String item : columns)
+		for (Entry<String, Integer> item : columns.entrySet())
 		{
-			fields.put(item, createField(item));
+			fields.put(item.getKey(), createField(item.getKey(),item.getValue()));
 		}
 		
 		// main bottom layout
@@ -259,18 +280,19 @@ public class EditorPanel extends JPanel
 	}
 	
 	// public interfacing method
-	public JTextField createField(String description)
+	public JTextField createField(String description, Integer queryType)
 	{
-		return createField(mainContentPanel, description);
+		return createField(mainContentPanel, description,queryType);
 	}
 	
-	private JTextField createField(JPanel comp, String description)
+	private JTextField createField(JPanel comp, String description, Integer queryType)
 	{	
 		int realRow = ((currentRow * 2) + 2);
 		JLabel label = new JLabel(description);
 		comp.add(label, "2, " + realRow + ", left, center");
 		
 		JTextField textField = new JTextField();
+		textField.setInputVerifier(new QueryInputVerifier(queryType));
 		comp.add(textField, "4, " + realRow + ", fill, default");
 
 		currentRow++;

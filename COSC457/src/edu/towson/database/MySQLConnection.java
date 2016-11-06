@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.swing.table.DefaultTableModel;
 public class MySQLConnection
@@ -232,19 +233,17 @@ public class MySQLConnection
 		}
 	}
 
-	public ArrayList<String> getColumns(String selectQuery)
+	public Hashtable<String, Integer> getColumns(String selectQuery)
 	{
-		ArrayList<String> list = new ArrayList<>();
+		Hashtable<String, Integer> list = new Hashtable<>();
 		try
 		{
-			
 			ResultSet query = ExecuteQuery(selectQuery);
 		
 			for (int i = 1; i <= query.getMetaData().getColumnCount(); i++)
 			{
-				list.add(query.getMetaData().getColumnName(i));
+				list.put(query.getMetaData().getColumnName(i),query.getMetaData().getColumnType(i));
 			}
-			
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block

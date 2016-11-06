@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -50,11 +52,11 @@ public class ColumnSelect extends JPanel
 		add(mainPanel,BorderLayout.CENTER);
 		
 		
-		ArrayList<String> tables = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
+		Hashtable<String,Integer> tables = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
 		selectedModel = new DefaultListModel<String>();
-		for (String item : tables)
+		for (Entry<String, Integer> item : tables.entrySet())
 		{
-			selectedModel.addElement(item);
+			selectedModel.addElement(item.getKey());
 		}
 		selected.setModel(selectedModel);
 		

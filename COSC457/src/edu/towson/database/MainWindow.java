@@ -53,23 +53,19 @@ public class MainWindow extends JFrame
 			}
 		});
 	}
-
 	/**
 	 * Create the application.
+	 * @throws Exception 
 	 */
-	public MainWindow()
+	public MainWindow() throws Exception
 	{
 		// setup db to be called in other classes
 		sqlConn = MySQLConnection.getInstance(); // singleton call pattern
-
-		if (sqlConn != null)
-		{
-			if(!sqlConn.connect(URL, USER, PASS, USERDB)) // connect to towson db
-			{											   // using database
-				System.out.println("Cannot Connect");
-				// TODO: add error window poppup
-				return;
-			}
+		
+		if(!sqlConn.connect(URL, USER, PASS, USERDB)) // connect to towson db
+		{											   // using database
+			MessageBox.show("Cannot Connect to Database. Please check your connection and try again.", "Connection ERROR");
+			throw new Exception("Cannot Connect");
 		}
 		initialize();
 		

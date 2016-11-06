@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import javax.swing.table.DefaultTableModel;
 public class MySQLConnection
@@ -48,20 +47,18 @@ public class MySQLConnection
 			try
 			{
 				Class.forName("com.mysql.jdbc.Driver"); // ensures required .jar is included
+				DriverManager.setLoginTimeout(3);
 				sqlConnect = DriverManager.getConnection(URL, USER, PASS);
-				
+
 				sqlConnect.prepareStatement("use rgott2db").executeQuery(); // set database to work with
 				
 			} catch (SQLException e)
 			{
-				// Tell the user they have the wrong password
 				e.printStackTrace();
-				//sqlConnect = null;
 				return false;
 			} catch (ClassNotFoundException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e.printStackTrace(); // if project is setup correctly error should not happen
 			}
 		}
 		return true;

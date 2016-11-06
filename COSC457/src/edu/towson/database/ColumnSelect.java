@@ -1,21 +1,18 @@
 package edu.towson.database;
 
-import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map.Entry;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 
 public class ColumnSelect extends JPanel
 {

@@ -81,6 +81,8 @@ public class QueryInputVerifier extends InputVerifier
 			    	errorMessage.setText("not valid format (MM-dd-yy)");
 			        return false;
 			    }
+			default:
+				break;
 		}
         errorMessage.setText("");
 		return true;

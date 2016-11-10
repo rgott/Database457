@@ -1,18 +1,24 @@
 package edu.towson.database;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpringLayout;
 
 public class ColumnSelect extends JPanel
 {
@@ -26,28 +32,51 @@ public class ColumnSelect extends JPanel
 		setLayout(new BorderLayout());
 		
 		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(null);
+		mainPanel.setLayout(new GridBagLayout());
 		
+		GridBagConstraints c1 = new GridBagConstraints();
 		JLabel lblSelectedColumns = new JLabel("Selected Columns");
-		lblSelectedColumns.setBounds(49, 25, 84, 14);
-		mainPanel.add(lblSelectedColumns);
+		c1.fill=GridBagConstraints.HORIZONTAL; 
+		c1.gridx = 0; 
+		c1.gridy = 0; 
+		//lblSelectedColumns.setBounds(39, -10, 250, 80);
+		mainPanel.add(lblSelectedColumns,c1);
 		
-		JLabel lblUnselectedColumns = new JLabel("Unselected columns");
-		lblUnselectedColumns.setBounds(305, 25, 94, 14);
-		mainPanel.add(lblUnselectedColumns);
+		GridBagConstraints c2 = new GridBagConstraints();
+		JLabel lblUnselectedColumns = new JLabel("Unselected Columns");
+		c2.fill=GridBagConstraints.HORIZONTAL; 
+		c2.gridx = 2; 
+		c2.gridy = 0; 
+		lblUnselectedColumns.setBounds(275, -10, 250, 80);
+		mainPanel.add(lblUnselectedColumns,c2);
 		
+		GridBagConstraints c3 = new GridBagConstraints();
 		JList<String> selected = new JList<String>();
+		c3.fill=GridBagConstraints.HORIZONTAL; 
+		c3.gridx = 0; 
+		c3.gridy = 1;
+		c3.gridheight=3; 
 		selected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		selected.setBounds(10, 50, 166, 206);
-		mainPanel.add(selected);
+		selected.setVisible(true); 
+		mainPanel.add(selected,c3);
 		
+		GridBagConstraints c4 = new GridBagConstraints();
 		JList<String> unselected = new JList<String>();
+		c4.fill=GridBagConstraints.HORIZONTAL; 
+		c4.gridx = 2; 
+		c4.gridy = 1;
+		c4.gridheight=3;
 		unselected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		unselected.setBounds(259, 50, 181, 206);
-		mainPanel.add(unselected);
+		unselected.setVisibleRowCount(5); 
+		mainPanel.add(unselected,c4);
+		
+		
 		
 		add(mainPanel,BorderLayout.CENTER);
 		
+		 
 		
 		ArrayList<ColumnData> tables = MySQLConnection.getInstance().getColumns("SELECT * FROM " + tableName);
 		selectedModel = new DefaultListModel<String>();
@@ -60,7 +89,11 @@ public class ColumnSelect extends JPanel
 		unselectedModel = new DefaultListModel<String>();
 		unselected.setModel(unselectedModel);
 		
+		GridBagConstraints c5 = new GridBagConstraints();
 		JButton remove_btn = new JButton(">>");
+		c5.fill=GridBagConstraints.HORIZONTAL; 
+		c5.gridx = 1; 
+		c5.gridy = 1;
 		remove_btn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -77,9 +110,15 @@ public class ColumnSelect extends JPanel
 			}
 		});
 		remove_btn.setBounds(186, 114, 63, 38);
-		mainPanel.add(remove_btn);
+		mainPanel.add(remove_btn,c5);
 		
+		
+		
+		GridBagConstraints c6 = new GridBagConstraints();
 		JButton add_btn = new JButton("<<");
+		c6.fill=GridBagConstraints.HORIZONTAL; 
+		c6.gridx = 1; 
+		c6.gridy = 2;
 		add_btn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -96,7 +135,7 @@ public class ColumnSelect extends JPanel
 			}
 		});
 		add_btn.setBounds(186, 155, 63, 38);
-		mainPanel.add(add_btn);
+		mainPanel.add(add_btn,c6);
 
 		
 		

@@ -27,6 +27,8 @@ public class ColumnSelect extends JPanel
 	/**
 	 * Create the panel.
 	 */
+	
+	
 	public ColumnSelect(String tableName)
 	{
 		setLayout(new BorderLayout());

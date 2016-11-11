@@ -12,7 +12,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.event.ActionListener;
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
@@ -44,12 +43,12 @@ public class TableSelect extends JPanel
 		
 		
 		// main bottom layout
-		Container bottomPanel = new Container();
+		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new BorderLayout());
 
 		
 		// bottom left layout
-		Container leftBPanel = new Container();
+		JPanel leftBPanel = new JPanel();
 		leftBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
 		back_btn = new JButton("Back");

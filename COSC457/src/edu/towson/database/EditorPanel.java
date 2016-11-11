@@ -7,9 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -214,7 +212,7 @@ public class EditorPanel extends JPanel
 		JPanel leftBPanel = new JPanel();
 		leftBPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
-		Button back_btn = new Button("Back");
+		JButton back_btn = new JButton("Back");
 		back_btn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)

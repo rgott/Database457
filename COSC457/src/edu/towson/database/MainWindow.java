@@ -2,16 +2,17 @@ package edu.towson.database;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-
-import java.awt.CardLayout;
 
 public class MainWindow extends JFrame
 {
@@ -45,6 +46,11 @@ public class MainWindow extends JFrame
 				try
 				{
 					MainWindow window = new MainWindow();
+					
+					ImageIcon img = new ImageIcon(new File("database.png").getCanonicalPath());
+					window.setIconImage(img.getImage());
+					window.setTitle("Database");
+					
 					window.setVisible(true);
 				} catch (Exception e)
 				{
@@ -68,6 +74,7 @@ public class MainWindow extends JFrame
 			throw new Exception("Cannot Connect");
 		}
 		initialize();
+		
 		
 		windowSwapper = Swappable.getInstance(this, mainContentPanel);
 		windowSwapper.add("view", new ViewPanel("*","DEPARTMENT"));

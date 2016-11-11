@@ -50,7 +50,7 @@ public class MySQLConnection
 				DriverManager.setLoginTimeout(3);
 				sqlConnect = DriverManager.getConnection(URL, USER, PASS);
 
-				sqlConnect.prepareStatement("use rgott2db").executeQuery(); // set database to work with
+				sqlConnect.prepareStatement("use " + userdb).executeQuery(); // set database to work with
 				
 			} catch (SQLException e)
 			{

@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
@@ -15,6 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 public class ViewPanel extends JPanel
 {
@@ -22,6 +27,8 @@ public class ViewPanel extends JPanel
 	 * Created to prevent warning
 	 */
 	private JTable table;
+	private TableColumnModel tcm;
+    private Map hiddenColumns;
 	
 	/**
 	 * Create the panel.
@@ -92,7 +99,8 @@ public class ViewPanel extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				ViewQueryResults = MySQLConnection.getInstance().ExecuteQuery(statement);
-				table.setModel(MySQLConnection.getModel(ViewQueryResults));
+			    tcm = (TableColumnModel) MySQLConnection.getModel(ViewQueryResults);
+				table.setModel((TableModel) tcm);
 			}
 		});
 		topPanel.add(refresh_btn);
@@ -126,6 +134,32 @@ public class ViewPanel extends JPanel
 		bottomPanel.add(createNew_btn);
 		add(bottomPanel,BorderLayout.SOUTH);
 	}
+	
+	public void hide(String columnName) {
+        int index = tcm.getColumnIndex(columnName);
+        TableColumn column = tcm.getColumn(index);
+        hiddenColumns.put(columnName, column);
+        hiddenColumns.put(":" + columnName, new Integer(index));
+        tcm.removeColumn(column);
+    }
+
+    public void show(String columnName) {
+        Object o = hiddenColumns.remove(columnName);
+        if (o == null) {
+            return;
+        }
+        tcm.addColumn((TableColumn) o);
+        o = hiddenColumns.remove(":" + columnName);
+        if (o == null) {
+            return;
+        }
+        int column = ((Integer) o).intValue();
+        int lastColumn = tcm.getColumnCount() - 1;
+        if (column < lastColumn) {
+            tcm.moveColumn(lastColumn, column);
+        }
+    }
+
 	
 	private JPopupMenu getTableMenu(int rowindex)
 	{

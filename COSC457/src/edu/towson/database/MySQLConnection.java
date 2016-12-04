@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 public class MySQLConnection
 {
 	private static MySQLConnection instance = null;
@@ -195,7 +198,7 @@ public class MySQLConnection
 
 			// set header info to model
 			DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
+			
 			// set rows to model
 			while (rs.next())
 			{

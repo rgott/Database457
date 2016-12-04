@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -99,8 +98,7 @@ public class ViewPanel extends JPanel
 			public void actionPerformed(ActionEvent arg0)
 			{
 				ViewQueryResults = MySQLConnection.getInstance().ExecuteQuery(statement);
-			    tcm = (TableColumnModel) MySQLConnection.getModel(ViewQueryResults);
-				table.setModel((TableModel) tcm);
+				table.setModel(MySQLConnection.getModel(ViewQueryResults));
 			}
 		});
 		topPanel.add(refresh_btn);

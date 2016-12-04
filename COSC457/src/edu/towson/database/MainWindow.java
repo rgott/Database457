@@ -68,7 +68,6 @@ public class MainWindow extends JFrame
 			{											   // using database
 				System.out.println("Cannot Connect");
 				// TODO: add error window poppup
-				return;
 			}
 		}
 		initialize();
@@ -96,5 +95,69 @@ public class MainWindow extends JFrame
 		getContentPane().add(mainContentPanel,BorderLayout.CENTER);
 		mainContentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		mainContentPanel.setLayout(new CardLayout(0, 0));
+<<<<<<< HEAD
+=======
+		
+		if(sqlConn.isConnected())
+		{
+			mainContentPanel.add(new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
+		}
+		else
+		{
+			mainContentPanel.add(new ErrorPanel());
+		}
+		
+		Container bottomPanel = new Container();
+		bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		swapPages_btn = new Button("Create New");
+		swapPages_btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				swapPanelWindow();
+				setMainPanelContentBasedOnCurrentWindow();
+			}
+		});
+		bottomPanel.add(swapPages_btn);
+		
+		frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+	}
+	public void swapPanelWindow()
+	{
+		// swap
+		if(window == CurrentWindow.Viewer)
+		{
+			window = CurrentWindow.Editor;
+		}
+		else if(window == CurrentWindow.Editor)
+		{
+			window = CurrentWindow.Viewer;
+		}
+	}
+	public void setMainPanelContentBasedOnCurrentWindow()
+	{
+		mainContentPanel.removeAll();
+		// TODO: fix Layout not updating
+		switch (window)
+		{
+			case Editor:
+				mainContentPanel.add(new DepartmentEditor());
+				swapPages_btn.setLabel("Back");
+				break;
+			case Viewer:
+				if(sqlConn.isConnected())
+				{
+					mainContentPanel.add(new ViewPanel(sqlConn.getPreparedStatement("SELECT * FROM DEPARTMENT")));
+				}
+				else
+				{
+					mainContentPanel.add(new ErrorPanel());
+				}
+				swapPages_btn.setLabel("Create New");
+				break;
+		}
+		mainContentPanel.revalidate(); // allow form to refresh
+>>>>>>> refs/remotes/origin/rob-dev
 	}
 }

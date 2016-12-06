@@ -18,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
 public class ViewPanel extends JPanel
 {
@@ -133,6 +132,7 @@ public class ViewPanel extends JPanel
 		add(bottomPanel,BorderLayout.SOUTH);
 	}
 	
+	@Deprecated
 	public void hide(String columnName) {
         int index = tcm.getColumnIndex(columnName);
         TableColumn column = tcm.getColumn(index);
@@ -141,6 +141,7 @@ public class ViewPanel extends JPanel
         tcm.removeColumn(column);
     }
 
+	@Deprecated
     public void show(String columnName) {
         Object o = hiddenColumns.remove(columnName);
         if (o == null) {

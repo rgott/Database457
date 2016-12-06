@@ -17,8 +17,8 @@ import javax.swing.border.EmptyBorder;
 public class MainWindow extends JFrame
 {
 	static final String URL = "jdbc:mysql://triton.towson.edu:3360";
-	static final String USER = "rgott2";
-	static final String PASS = "Cosc*9d8n";
+	static final String USER = "rmctee1";
+	static final String PASS = "Cosc*hdrw";
 	
 	static final String USERDB = USER + "db";
 

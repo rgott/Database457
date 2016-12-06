@@ -1,6 +1,7 @@
 package edu.towson.database;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class TableSelect extends JPanel
 				selectColumns_btn.setEnabled(true);
 			}
 		});
-		add(list,BorderLayout.CENTER);
+		add(new JScrollPane(list),BorderLayout.CENTER);
 		
 		JLabel lblSelectTable = new JLabel("Select Table");
 		add(lblSelectTable,BorderLayout.NORTH);

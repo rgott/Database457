@@ -173,7 +173,8 @@ public class ColumnSelect extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				Swappable.getInstance().changeTo(new ViewPanel(createColumnsForSelect(tableName), tableName));
+				Swappable.getInstance().add("view", new ViewPanel(createColumnsForSelect(tableName), tableName));
+				Swappable.getInstance().changeTo("view");
 			}
 		});
 		rightBPanel.add(finish_btn);
